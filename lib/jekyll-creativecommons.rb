@@ -51,10 +51,10 @@ class JekyllCreativeCommons < Liquid::Tag
 <a href='#{@license_url}' id='license' class='#{@license_class}'></a>
 <span class='licensetext'>
 <span property='dct:title' rel='dct:type'>#{page_link}</span>#{author_link}
-#{license_prolog}
-<a rel='license' itemprop='license' href='#{@license_url}'>#{@license_name}</a>
+ #{license_prolog}
+ <a rel='license' itemprop='license' href='#{@license_url}'>#{@license_name}</a>
 </span>
-"""
+""".delete "\n"
   end
 end
 
