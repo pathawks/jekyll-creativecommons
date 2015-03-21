@@ -42,11 +42,16 @@ class JekyllCreativeCommons < Liquid::Tag
     else
       author_link = ""
     end
+    unless @license_class == "mark"
+      license_prolog = "is licensed under a"
+    else
+      license_prolog = "is"
+    end
 """
 <a href='#{@license_url}' id='license' class='#{@license_class}'></a>
 <span class='licensetext'>
 <span property='dct:title' rel='dct:type'>#{page_link}</span>#{author_link}
-is licensed under a
+#{license_prolog}
 <a rel='license' itemprop='license' href='#{@license_url}'>#{@license_name}</a>
 </span>
 """
