@@ -12,7 +12,11 @@ Include a Liquid tag with the URL of the Creative Commons license you wish to us
 
 ## Installation
 
-1. Add `gem 'jekyll-creativecommons'` to your site's Gemfile and run `bundle`
+1. Add the following to your site's `Gemfile` and run `bundle`:
+```shell
+	gem 'jekyll-creativecommons', :github => 'pathawks/jekyll-creativecommons'
+```
+
 2. Add the following to your site's `_config.yml`:
 
 ```yml
