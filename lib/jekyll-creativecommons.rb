@@ -5,7 +5,7 @@ class JekyllCreativeCommons < Liquid::Tag
     if !(license =~ Syntax) then
       raise "No license url provided in the \"license\" tag"
     end
-    @license_url   = license
+    @license_url   = license.chop
     @license_class = $2
     license_ver    = $3
     jurisdiction   = "International"
