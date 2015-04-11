@@ -37,8 +37,15 @@ class JekyllCreativeCommons < Liquid::Tag
         author_name = nil
       end
     end
+    unless ((author_url = context["page.author.url"]))
+      author_url = nil
+    end
     unless (author_name == nil)
-      author_link = " by <a href='#{@author_url}'>#{author_name}</a>"
+      unless (author_url == nil)
+        author_link = " by <a href='#{author_url}'>#{author_name}</a>"
+      else
+        author_link = " by #{author_name}"
+      end
     else
       author_link = ""
     end
