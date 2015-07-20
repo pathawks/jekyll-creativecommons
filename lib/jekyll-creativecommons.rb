@@ -31,7 +31,16 @@ class JekyllCreativeCommons < Liquid::Tag
   end
 
   def render(context)
-    page_link = context["page.title"]
+    if context["page.title"]
+        begin
+            gem 'redcarpet'
+            if context["page.title"]
+                page_link = Redcarpet::Render::SmartyPants.render(context["page.title"])
+            end
+        rescue Gem::LoadError
+            page_link = context["page.title"]
+        end
+    end
     unless ((author_name = context["page.author.name"]))
       unless ((author_name = context["page.author"]))
         author_name = nil
