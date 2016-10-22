@@ -1,5 +1,16 @@
+# Frozen-String-Literal: true
+# Encoding: UTF-8
+
 class JekyllCreativeCommons < Liquid::Tag
-  Syntax = /\/\/creativecommons.org\/(licenses|publicdomain)\/([a-z\-]*)\/(\d\.?\d)?\//
+  Syntax = %r!//creativecommons.org/(licenses|publicdomain)/([a-z\-]*)/(\d\.?\d)?/!
+  LICENSES = {
+    "by-nc-sa" => "Creative Commons Attribution-NonCommercial-ShareAlike",
+    "by-nc-nd" => "Creative Commons Attribution-NonCommercial-NoDerivs",
+    "by-nc" => "Creative Commons Attribution-NonCommercial",
+    "by-sa" => "Creative Commons Attribution-ShareAlike",
+    "by-nd" => "Creative Commons Attribution-NoDerivs",
+    "by" => "Creative Commons Attribution"
+  }.freeze
 
   def initialize(tag_name, license, tokens)
     if !(license =~ Syntax) then
@@ -9,20 +20,7 @@ class JekyllCreativeCommons < Liquid::Tag
     @license_class = $2
     license_ver    = $3
     jurisdiction   = "International"
-    case @license_class
-      when "by-nc-sa"
-        license_name = "Creative Commons Attribution-NonCommercial-ShareAlike"
-      when "by-nc-nd"
-        license_name = "Creative Commons Attribution-NonCommercial-NoDerivs"
-      when "by-nc"
-        license_name = "Creative Commons Attribution-NonCommercial"
-      when "by-sa"
-        license_name = "Creative Commons Attribution-ShareAlike"
-      when "by-nd"
-        license_name = "Creative Commons Attribution-NoDerivs"
-      when "by"
-        license_name = "Creative Commons Attribution"
-    end
+    license_name = LICENSES[@license_class]
     if @license_class == "mark" and $1 == "publicdomain"
       @license_name  = "free of known copyright restrictions."
     else
@@ -32,23 +30,17 @@ class JekyllCreativeCommons < Liquid::Tag
 
   def render(context)
     if context["page.title"]
-        begin
-            gem 'redcarpet'
-            if context["page.title"]
-                page_link = Redcarpet::Render::SmartyPants.render(context["page.title"])
-            end
-        rescue Gem::LoadError
-            page_link = context["page.title"]
+      begin
+        gem 'redcarpet'
+        if context["page.title"]
+            page_link = Redcarpet::Render::SmartyPants.render(context["page.title"])
         end
-    end
-    unless ((author_name = context["page.author.name"]))
-      unless ((author_name = context["page.author"]))
-        author_name = nil
+      rescue Gem::LoadError
+        page_link = context["page.title"]
       end
     end
-    unless ((author_url = context["page.author.url"]))
-      author_url = nil
-    end
+    author_name = context["page.author.name"] || context["page.author"] || nil
+    author_url = context["page.author.url"] || nil
     unless (author_name == nil)
       unless (author_url == nil)
         author_link = " by <a href='#{author_url}'>#{author_name}</a>"
